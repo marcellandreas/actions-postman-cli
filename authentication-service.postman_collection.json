@@ -8,7 +8,7 @@
 	"variable": [
 		{
 			"key": "baseUrl",
-			"value": "http://localhost:8081",
+			"value": "http://103.150.190.166:8000",
 			"type": "string"
 		},
 		{
@@ -38,8 +38,12 @@
 						],
 						"url": {
 							"raw": "{{baseUrl}}/ping",
-							"host": ["{{baseUrl}}"],
-							"path": ["ping"]
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"ping"
+							]
 						},
 						"description": "Health check endpoint.\n\n**Expected:** 200 OK\n```json\n{\"message\": \"pong\"}\n```"
 					}
@@ -56,8 +60,12 @@
 						],
 						"url": {
 							"raw": "{{baseUrl}}/ping",
-							"host": ["{{baseUrl}}"],
-							"path": ["ping"]
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"ping"
+							]
 						},
 						"description": "Test wrong HTTP method.\n\n**Expected:** 405 Method Not Allowed"
 					}
@@ -109,8 +117,13 @@
 						},
 						"url": {
 							"raw": "{{baseUrl}}/users/signin",
-							"host": ["{{baseUrl}}"],
-							"path": ["users", "signin"]
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"users",
+								"signin"
+							]
 						},
 						"description": "Sign in with valid credentials.\n\n**Expected:** 200 OK\n```json\n{\"token\": \"jwt.token.here\"}\n```\n\nNote: Token is automatically saved to `authToken` variable."
 					}
@@ -139,8 +152,13 @@
 						},
 						"url": {
 							"raw": "{{baseUrl}}/users/signin",
-							"host": ["{{baseUrl}}"],
-							"path": ["users", "signin"]
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"users",
+								"signin"
+							]
 						},
 						"description": "Sign in with non-existent email (English error).\n\n**Expected:** 401 Unauthorized\n\nVerify `translated_message` is in English."
 					}
@@ -169,8 +187,13 @@
 						},
 						"url": {
 							"raw": "{{baseUrl}}/users/signin",
-							"host": ["{{baseUrl}}"],
-							"path": ["users", "signin"]
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"users",
+								"signin"
+							]
 						},
 						"description": "Sign in with non-existent email (Indonesian error).\n\n**Expected:** 401 Unauthorized\n\nVerify `translated_message` is in Indonesian."
 					}
@@ -199,8 +222,13 @@
 						},
 						"url": {
 							"raw": "{{baseUrl}}/users/signin",
-							"host": ["{{baseUrl}}"],
-							"path": ["users", "signin"]
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"users",
+								"signin"
+							]
 						},
 						"description": "Sign in with wrong password (English error).\n\n**Expected:** 401 Unauthorized\n\nVerify `translated_message` is in English."
 					}
@@ -229,8 +257,13 @@
 						},
 						"url": {
 							"raw": "{{baseUrl}}/users/signin",
-							"host": ["{{baseUrl}}"],
-							"path": ["users", "signin"]
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"users",
+								"signin"
+							]
 						},
 						"description": "Sign in with wrong password (Indonesian error).\n\n**Expected:** 401 Unauthorized\n\nVerify `translated_message` is in Indonesian."
 					}
@@ -259,8 +292,13 @@
 						},
 						"url": {
 							"raw": "{{baseUrl}}/users/signin",
-							"host": ["{{baseUrl}}"],
-							"path": ["users", "signin"]
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"users",
+								"signin"
+							]
 						},
 						"description": "Sign in without email field.\n\n**Expected:** 400 Bad Request"
 					}
@@ -289,8 +327,13 @@
 						},
 						"url": {
 							"raw": "{{baseUrl}}/users/signin",
-							"host": ["{{baseUrl}}"],
-							"path": ["users", "signin"]
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"users",
+								"signin"
+							]
 						},
 						"description": "Sign in without password field.\n\n**Expected:** 400 Bad Request"
 					}
@@ -319,8 +362,13 @@
 						},
 						"url": {
 							"raw": "{{baseUrl}}/users/signin",
-							"host": ["{{baseUrl}}"],
-							"path": ["users", "signin"]
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"users",
+								"signin"
+							]
 						},
 						"description": "Sign in with empty JSON body.\n\n**Expected:** 400 Bad Request"
 					}
@@ -349,8 +397,13 @@
 						},
 						"url": {
 							"raw": "{{baseUrl}}/users/signin",
-							"host": ["{{baseUrl}}"],
-							"path": ["users", "signin"]
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"users",
+								"signin"
+							]
 						},
 						"description": "Sign in with malformed JSON.\n\n**Expected:** 400 Bad Request"
 					}
@@ -379,8 +432,13 @@
 						},
 						"url": {
 							"raw": "{{baseUrl}}/users/signin",
-							"host": ["{{baseUrl}}"],
-							"path": ["users", "signin"]
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"users",
+								"signin"
+							]
 						},
 						"description": "Sign in with invalid email format.\n\n**Expected:** 400 Bad Request"
 					}
@@ -409,8 +467,13 @@
 						},
 						"url": {
 							"raw": "{{baseUrl}}/users/signin",
-							"host": ["{{baseUrl}}"],
-							"path": ["users", "signin"]
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"users",
+								"signin"
+							]
 						},
 						"description": "Sign in with empty email.\n\n**Expected:** 400 Bad Request"
 					}
@@ -439,8 +502,13 @@
 						},
 						"url": {
 							"raw": "{{baseUrl}}/users/signin",
-							"host": ["{{baseUrl}}"],
-							"path": ["users", "signin"]
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"users",
+								"signin"
+							]
 						},
 						"description": "Sign in with empty password.\n\n**Expected:** 400 Bad Request"
 					}
@@ -469,8 +537,13 @@
 						},
 						"url": {
 							"raw": "{{baseUrl}}/users/signin",
-							"host": ["{{baseUrl}}"],
-							"path": ["users", "signin"]
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"users",
+								"signin"
+							]
 						},
 						"description": "Sign in with wrong Content-Type.\n\n**Expected:** 400 Bad Request or 415 Unsupported Media Type"
 					}
@@ -499,8 +572,13 @@
 						},
 						"url": {
 							"raw": "{{baseUrl}}/users/signin",
-							"host": ["{{baseUrl}}"],
-							"path": ["users", "signin"]
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"users",
+								"signin"
+							]
 						},
 						"description": "Sign in with unsupported locale (French).\n\n**Expected:** 401 Unauthorized\n\nVerify `translated_message` falls back to English."
 					}
@@ -531,8 +609,13 @@
 						],
 						"url": {
 							"raw": "{{baseUrl}}/users/signout",
-							"host": ["{{baseUrl}}"],
-							"path": ["users", "signout"]
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"users",
+								"signout"
+							]
 						},
 						"description": "Sign out with valid token.\n\n**Prerequisite:** Run 'SignIn - Success' first.\n\n**Expected:** 204 No Content"
 					}
@@ -553,8 +636,13 @@
 						],
 						"url": {
 							"raw": "{{baseUrl}}/users/signout",
-							"host": ["{{baseUrl}}"],
-							"path": ["users", "signout"]
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"users",
+								"signout"
+							]
 						},
 						"description": "Sign out without Authorization header (English).\n\n**Expected:** 400 Bad Request\n\nVerify `translated_message` is in English."
 					}
@@ -575,8 +663,13 @@
 						],
 						"url": {
 							"raw": "{{baseUrl}}/users/signout",
-							"host": ["{{baseUrl}}"],
-							"path": ["users", "signout"]
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"users",
+								"signout"
+							]
 						},
 						"description": "Sign out without Authorization header (Indonesian).\n\n**Expected:** 400 Bad Request\n\nVerify `translated_message` is in Indonesian."
 					}
@@ -601,8 +694,13 @@
 						],
 						"url": {
 							"raw": "{{baseUrl}}/users/signout",
-							"host": ["{{baseUrl}}"],
-							"path": ["users", "signout"]
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"users",
+								"signout"
+							]
 						},
 						"description": "Sign out with empty Authorization header.\n\n**Expected:** 400 Bad Request or 401 Unauthorized"
 					}
@@ -627,8 +725,13 @@
 						],
 						"url": {
 							"raw": "{{baseUrl}}/users/signout",
-							"host": ["{{baseUrl}}"],
-							"path": ["users", "signout"]
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"users",
+								"signout"
+							]
 						},
 						"description": "Sign out without Bearer prefix.\n\n**Expected:** 401 Unauthorized"
 					}
@@ -653,8 +756,13 @@
 						],
 						"url": {
 							"raw": "{{baseUrl}}/users/signout",
-							"host": ["{{baseUrl}}"],
-							"path": ["users", "signout"]
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"users",
+								"signout"
+							]
 						},
 						"description": "Sign out with invalid/forged JWT (English).\n\n**Expected:** 401 Unauthorized\n\nVerify `translated_message` is in English."
 					}
@@ -679,8 +787,13 @@
 						],
 						"url": {
 							"raw": "{{baseUrl}}/users/signout",
-							"host": ["{{baseUrl}}"],
-							"path": ["users", "signout"]
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"users",
+								"signout"
+							]
 						},
 						"description": "Sign out with invalid/forged JWT (Indonesian).\n\n**Expected:** 401 Unauthorized\n\nVerify `translated_message` is in Indonesian."
 					}
@@ -705,8 +818,13 @@
 						],
 						"url": {
 							"raw": "{{baseUrl}}/users/signout",
-							"host": ["{{baseUrl}}"],
-							"path": ["users", "signout"]
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"users",
+								"signout"
+							]
 						},
 						"description": "Sign out with malformed JWT.\n\n**Expected:** 401 Unauthorized"
 					}
@@ -731,8 +849,13 @@
 						],
 						"url": {
 							"raw": "{{baseUrl}}/users/signout",
-							"host": ["{{baseUrl}}"],
-							"path": ["users", "signout"]
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"users",
+								"signout"
+							]
 						},
 						"description": "Sign out with already revoked token.\n\n**Prerequisite:** Run 'SignOut - Success' first.\n\n**Expected:** 401 Unauthorized"
 					}
@@ -767,8 +890,14 @@
 						},
 						"url": {
 							"raw": "{{baseUrl}}/users/password/forgot",
-							"host": ["{{baseUrl}}"],
-							"path": ["users", "password", "forgot"]
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"users",
+								"password",
+								"forgot"
+							]
 						},
 						"description": "Request password reset email in English.\n\n**Expected:** 204 No Content\n\nCheck email for reset token (email should be in English)."
 					}
@@ -797,8 +926,14 @@
 						},
 						"url": {
 							"raw": "{{baseUrl}}/users/password/forgot",
-							"host": ["{{baseUrl}}"],
-							"path": ["users", "password", "forgot"]
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"users",
+								"password",
+								"forgot"
+							]
 						},
 						"description": "Request password reset email in Indonesian.\n\n**Expected:** 204 No Content\n\nCheck email for reset token (email should be in Indonesian)."
 					}
@@ -827,8 +962,14 @@
 						},
 						"url": {
 							"raw": "{{baseUrl}}/users/password/forgot",
-							"host": ["{{baseUrl}}"],
-							"path": ["users", "password", "forgot"]
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"users",
+								"password",
+								"forgot"
+							]
 						},
 						"description": "Request password reset for non-existent user (English).\n\n**Expected:** 404 Not Found\n\nVerify `translated_message` is in English."
 					}
@@ -857,8 +998,14 @@
 						},
 						"url": {
 							"raw": "{{baseUrl}}/users/password/forgot",
-							"host": ["{{baseUrl}}"],
-							"path": ["users", "password", "forgot"]
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"users",
+								"password",
+								"forgot"
+							]
 						},
 						"description": "Request password reset for non-existent user (Indonesian).\n\n**Expected:** 404 Not Found\n\nVerify `translated_message` is in Indonesian."
 					}
@@ -887,8 +1034,14 @@
 						},
 						"url": {
 							"raw": "{{baseUrl}}/users/password/forgot",
-							"host": ["{{baseUrl}}"],
-							"path": ["users", "password", "forgot"]
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"users",
+								"password",
+								"forgot"
+							]
 						},
 						"description": "Request without email field.\n\n**Expected:** 400 Bad Request"
 					}
@@ -917,8 +1070,14 @@
 						},
 						"url": {
 							"raw": "{{baseUrl}}/users/password/forgot",
-							"host": ["{{baseUrl}}"],
-							"path": ["users", "password", "forgot"]
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"users",
+								"password",
+								"forgot"
+							]
 						},
 						"description": "Request without locale field.\n\n**Expected:** 400 Bad Request"
 					}
@@ -947,8 +1106,14 @@
 						},
 						"url": {
 							"raw": "{{baseUrl}}/users/password/forgot",
-							"host": ["{{baseUrl}}"],
-							"path": ["users", "password", "forgot"]
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"users",
+								"password",
+								"forgot"
+							]
 						},
 						"description": "Request with empty body.\n\n**Expected:** 400 Bad Request"
 					}
@@ -977,8 +1142,14 @@
 						},
 						"url": {
 							"raw": "{{baseUrl}}/users/password/forgot",
-							"host": ["{{baseUrl}}"],
-							"path": ["users", "password", "forgot"]
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"users",
+								"password",
+								"forgot"
+							]
 						},
 						"description": "Request with invalid email format.\n\n**Expected:** 400 Bad Request"
 					}
@@ -1007,8 +1178,14 @@
 						},
 						"url": {
 							"raw": "{{baseUrl}}/users/password/forgot",
-							"host": ["{{baseUrl}}"],
-							"path": ["users", "password", "forgot"]
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"users",
+								"password",
+								"forgot"
+							]
 						},
 						"description": "Request with empty email.\n\n**Expected:** 400 Bad Request"
 					}
@@ -1037,8 +1214,14 @@
 						},
 						"url": {
 							"raw": "{{baseUrl}}/users/password/forgot",
-							"host": ["{{baseUrl}}"],
-							"path": ["users", "password", "forgot"]
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"users",
+								"password",
+								"forgot"
+							]
 						},
 						"description": "Request with malformed JSON.\n\n**Expected:** 400 Bad Request"
 					}
@@ -1073,8 +1256,13 @@
 						},
 						"url": {
 							"raw": "{{baseUrl}}/users/password",
-							"host": ["{{baseUrl}}"],
-							"path": ["users", "password"]
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"users",
+								"password"
+							]
 						},
 						"description": "Reset password with valid token.\n\n**Prerequisite:** Get reset token from email after running 'ForgotPassword - Success'.\n\n**Expected:** 204 No Content"
 					}
@@ -1103,8 +1291,13 @@
 						},
 						"url": {
 							"raw": "{{baseUrl}}/users/password",
-							"host": ["{{baseUrl}}"],
-							"path": ["users", "password"]
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"users",
+								"password"
+							]
 						},
 						"description": "Reset password with invalid token (English).\n\n**Expected:** 400 Bad Request or 404 Not Found\n\nVerify `translated_message` is in English."
 					}
@@ -1133,8 +1326,13 @@
 						},
 						"url": {
 							"raw": "{{baseUrl}}/users/password",
-							"host": ["{{baseUrl}}"],
-							"path": ["users", "password"]
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"users",
+								"password"
+							]
 						},
 						"description": "Reset password with invalid token (Indonesian).\n\n**Expected:** 400 Bad Request or 404 Not Found\n\nVerify `translated_message` is in Indonesian."
 					}
@@ -1163,8 +1361,13 @@
 						},
 						"url": {
 							"raw": "{{baseUrl}}/users/password",
-							"host": ["{{baseUrl}}"],
-							"path": ["users", "password"]
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"users",
+								"password"
+							]
 						},
 						"description": "Reset password without token field.\n\n**Expected:** 400 Bad Request"
 					}
@@ -1193,8 +1396,13 @@
 						},
 						"url": {
 							"raw": "{{baseUrl}}/users/password",
-							"host": ["{{baseUrl}}"],
-							"path": ["users", "password"]
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"users",
+								"password"
+							]
 						},
 						"description": "Reset password without newPassword field.\n\n**Expected:** 400 Bad Request"
 					}
@@ -1223,8 +1431,13 @@
 						},
 						"url": {
 							"raw": "{{baseUrl}}/users/password",
-							"host": ["{{baseUrl}}"],
-							"path": ["users", "password"]
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"users",
+								"password"
+							]
 						},
 						"description": "Reset password with empty body.\n\n**Expected:** 400 Bad Request"
 					}
@@ -1253,8 +1466,13 @@
 						},
 						"url": {
 							"raw": "{{baseUrl}}/users/password",
-							"host": ["{{baseUrl}}"],
-							"path": ["users", "password"]
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"users",
+								"password"
+							]
 						},
 						"description": "Reset with password too short (English).\n\n**Expected:** 400 Bad Request (PasswordTooShort)\n\nVerify `translated_message` is in English."
 					}
@@ -1283,8 +1501,13 @@
 						},
 						"url": {
 							"raw": "{{baseUrl}}/users/password",
-							"host": ["{{baseUrl}}"],
-							"path": ["users", "password"]
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"users",
+								"password"
+							]
 						},
 						"description": "Reset with password too short (Indonesian).\n\n**Expected:** 400 Bad Request (PasswordTooShort)\n\nVerify `translated_message` is in Indonesian."
 					}
@@ -1313,8 +1536,13 @@
 						},
 						"url": {
 							"raw": "{{baseUrl}}/users/password",
-							"host": ["{{baseUrl}}"],
-							"path": ["users", "password"]
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"users",
+								"password"
+							]
 						},
 						"description": "Reset with password missing uppercase.\n\n**Expected:** 400 Bad Request (PasswordNoUpperCase)"
 					}
@@ -1343,8 +1571,13 @@
 						},
 						"url": {
 							"raw": "{{baseUrl}}/users/password",
-							"host": ["{{baseUrl}}"],
-							"path": ["users", "password"]
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"users",
+								"password"
+							]
 						},
 						"description": "Reset with password missing lowercase.\n\n**Expected:** 400 Bad Request (PasswordNoLowerCase)"
 					}
@@ -1373,8 +1606,13 @@
 						},
 						"url": {
 							"raw": "{{baseUrl}}/users/password",
-							"host": ["{{baseUrl}}"],
-							"path": ["users", "password"]
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"users",
+								"password"
+							]
 						},
 						"description": "Reset with password missing number.\n\n**Expected:** 400 Bad Request (PasswordNoNumber)"
 					}
@@ -1403,8 +1641,13 @@
 						},
 						"url": {
 							"raw": "{{baseUrl}}/users/password",
-							"host": ["{{baseUrl}}"],
-							"path": ["users", "password"]
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"users",
+								"password"
+							]
 						},
 						"description": "Reset with password missing special character.\n\n**Expected:** 400 Bad Request (PasswordNoSpecialChar)"
 					}
@@ -1433,8 +1676,13 @@
 						},
 						"url": {
 							"raw": "{{baseUrl}}/users/password",
-							"host": ["{{baseUrl}}"],
-							"path": ["users", "password"]
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"users",
+								"password"
+							]
 						},
 						"description": "Reset with empty token.\n\n**Expected:** 400 Bad Request"
 					}
@@ -1463,8 +1711,13 @@
 						},
 						"url": {
 							"raw": "{{baseUrl}}/users/password",
-							"host": ["{{baseUrl}}"],
-							"path": ["users", "password"]
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"users",
+								"password"
+							]
 						},
 						"description": "Reset with empty password.\n\n**Expected:** 400 Bad Request"
 					}
@@ -1493,8 +1746,13 @@
 						},
 						"url": {
 							"raw": "{{baseUrl}}/users/password",
-							"host": ["{{baseUrl}}"],
-							"path": ["users", "password"]
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"users",
+								"password"
+							]
 						},
 						"description": "Reset with malformed JSON.\n\n**Expected:** 400 Bad Request"
 					}
@@ -1523,8 +1781,13 @@
 						},
 						"url": {
 							"raw": "{{baseUrl}}/users/password",
-							"host": ["{{baseUrl}}"],
-							"path": ["users", "password"]
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"users",
+								"password"
+							]
 						},
 						"description": "Reset with already used token.\n\n**Prerequisite:** Run 'ResetPassword - Success' first.\n\n**Expected:** 400 Bad Request or 404 Not Found"
 					}
