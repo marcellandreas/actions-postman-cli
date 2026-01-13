@@ -1,0 +1,1536 @@
+{
+	"info": {
+		"_postman_id": "auth-service-tests",
+		"name": "Authentication Service - Blackbox Tests",
+		"description": "Comprehensive blackbox tests for the Authentication Service API endpoints.\n\nIncludes internationalization (i18n) tests with Accept-Language header.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "http://localhost:8081",
+			"type": "string"
+		},
+		{
+			"key": "authToken",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "resetToken",
+			"value": "",
+			"type": "string"
+		}
+	],
+	"item": [
+		{
+			"name": "01 - Ping",
+			"item": [
+				{
+					"name": "Ping - Success",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/ping",
+							"host": ["{{baseUrl}}"],
+							"path": ["ping"]
+						},
+						"description": "Health check endpoint.\n\n**Expected:** 200 OK\n```json\n{\"message\": \"pong\"}\n```"
+					}
+				},
+				{
+					"name": "Ping - Wrong Method (POST)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/ping",
+							"host": ["{{baseUrl}}"],
+							"path": ["ping"]
+						},
+						"description": "Test wrong HTTP method.\n\n**Expected:** 405 Method Not Allowed"
+					}
+				}
+			],
+			"description": "Health check endpoint tests"
+		},
+		{
+			"name": "02 - Sign In",
+			"item": [
+				{
+					"name": "SignIn - Success",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 200) {",
+									"    var jsonData = pm.response.json();",
+									"    if (jsonData.token) {",
+									"        pm.collectionVariables.set('authToken', jsonData.token);",
+									"        console.log('Token saved to authToken variable');",
+									"    }",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept-Language",
+								"value": "en"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"admin@industrix.id\",\n    \"password\": \"Admin123!\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/users/signin",
+							"host": ["{{baseUrl}}"],
+							"path": ["users", "signin"]
+						},
+						"description": "Sign in with valid credentials.\n\n**Expected:** 200 OK\n```json\n{\"token\": \"jwt.token.here\"}\n```\n\nNote: Token is automatically saved to `authToken` variable."
+					}
+				},
+				{
+					"name": "SignIn - User Not Found (English)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept-Language",
+								"value": "en"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"notfound@example.com\",\n    \"password\": \"Admin123!\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/users/signin",
+							"host": ["{{baseUrl}}"],
+							"path": ["users", "signin"]
+						},
+						"description": "Sign in with non-existent email (English error).\n\n**Expected:** 401 Unauthorized\n\nVerify `translated_message` is in English."
+					}
+				},
+				{
+					"name": "SignIn - User Not Found (Indonesian)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept-Language",
+								"value": "id"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"notfound@example.com\",\n    \"password\": \"Admin123!\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/users/signin",
+							"host": ["{{baseUrl}}"],
+							"path": ["users", "signin"]
+						},
+						"description": "Sign in with non-existent email (Indonesian error).\n\n**Expected:** 401 Unauthorized\n\nVerify `translated_message` is in Indonesian."
+					}
+				},
+				{
+					"name": "SignIn - Wrong Password (English)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept-Language",
+								"value": "en"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"admin@industrix.id\",\n    \"password\": \"wrongpassword\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/users/signin",
+							"host": ["{{baseUrl}}"],
+							"path": ["users", "signin"]
+						},
+						"description": "Sign in with wrong password (English error).\n\n**Expected:** 401 Unauthorized\n\nVerify `translated_message` is in English."
+					}
+				},
+				{
+					"name": "SignIn - Wrong Password (Indonesian)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept-Language",
+								"value": "id"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"admin@industrix.id\",\n    \"password\": \"wrongpassword\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/users/signin",
+							"host": ["{{baseUrl}}"],
+							"path": ["users", "signin"]
+						},
+						"description": "Sign in with wrong password (Indonesian error).\n\n**Expected:** 401 Unauthorized\n\nVerify `translated_message` is in Indonesian."
+					}
+				},
+				{
+					"name": "SignIn - Missing Email",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept-Language",
+								"value": "en"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"password\": \"Admin123!\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/users/signin",
+							"host": ["{{baseUrl}}"],
+							"path": ["users", "signin"]
+						},
+						"description": "Sign in without email field.\n\n**Expected:** 400 Bad Request"
+					}
+				},
+				{
+					"name": "SignIn - Missing Password",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept-Language",
+								"value": "en"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"admin@industrix.id\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/users/signin",
+							"host": ["{{baseUrl}}"],
+							"path": ["users", "signin"]
+						},
+						"description": "Sign in without password field.\n\n**Expected:** 400 Bad Request"
+					}
+				},
+				{
+					"name": "SignIn - Empty Body",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept-Language",
+								"value": "en"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/users/signin",
+							"host": ["{{baseUrl}}"],
+							"path": ["users", "signin"]
+						},
+						"description": "Sign in with empty JSON body.\n\n**Expected:** 400 Bad Request"
+					}
+				},
+				{
+					"name": "SignIn - Malformed JSON",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept-Language",
+								"value": "en"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{invalid json"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/users/signin",
+							"host": ["{{baseUrl}}"],
+							"path": ["users", "signin"]
+						},
+						"description": "Sign in with malformed JSON.\n\n**Expected:** 400 Bad Request"
+					}
+				},
+				{
+					"name": "SignIn - Invalid Email Format",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept-Language",
+								"value": "en"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"not-an-email\",\n    \"password\": \"Admin123!\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/users/signin",
+							"host": ["{{baseUrl}}"],
+							"path": ["users", "signin"]
+						},
+						"description": "Sign in with invalid email format.\n\n**Expected:** 400 Bad Request"
+					}
+				},
+				{
+					"name": "SignIn - Empty Email",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept-Language",
+								"value": "en"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"\",\n    \"password\": \"Admin123!\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/users/signin",
+							"host": ["{{baseUrl}}"],
+							"path": ["users", "signin"]
+						},
+						"description": "Sign in with empty email.\n\n**Expected:** 400 Bad Request"
+					}
+				},
+				{
+					"name": "SignIn - Empty Password",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept-Language",
+								"value": "en"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"admin@industrix.id\",\n    \"password\": \"\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/users/signin",
+							"host": ["{{baseUrl}}"],
+							"path": ["users", "signin"]
+						},
+						"description": "Sign in with empty password.\n\n**Expected:** 400 Bad Request"
+					}
+				},
+				{
+					"name": "SignIn - Wrong Content-Type",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "text/plain"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept-Language",
+								"value": "en"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "email=admin@industrix.id&password=Admin123!"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/users/signin",
+							"host": ["{{baseUrl}}"],
+							"path": ["users", "signin"]
+						},
+						"description": "Sign in with wrong Content-Type.\n\n**Expected:** 400 Bad Request or 415 Unsupported Media Type"
+					}
+				},
+				{
+					"name": "SignIn - Unsupported Locale (fallback)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept-Language",
+								"value": "fr"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"notfound@example.com\",\n    \"password\": \"Admin123!\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/users/signin",
+							"host": ["{{baseUrl}}"],
+							"path": ["users", "signin"]
+						},
+						"description": "Sign in with unsupported locale (French).\n\n**Expected:** 401 Unauthorized\n\nVerify `translated_message` falls back to English."
+					}
+				}
+			],
+			"description": "User authentication endpoint tests with i18n"
+		},
+		{
+			"name": "03 - Sign Out",
+			"item": [
+				{
+					"name": "SignOut - Success",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authToken}}"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept-Language",
+								"value": "en"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/users/signout",
+							"host": ["{{baseUrl}}"],
+							"path": ["users", "signout"]
+						},
+						"description": "Sign out with valid token.\n\n**Prerequisite:** Run 'SignIn - Success' first.\n\n**Expected:** 204 No Content"
+					}
+				},
+				{
+					"name": "SignOut - Missing Auth Header (English)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept-Language",
+								"value": "en"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/users/signout",
+							"host": ["{{baseUrl}}"],
+							"path": ["users", "signout"]
+						},
+						"description": "Sign out without Authorization header (English).\n\n**Expected:** 400 Bad Request\n\nVerify `translated_message` is in English."
+					}
+				},
+				{
+					"name": "SignOut - Missing Auth Header (Indonesian)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept-Language",
+								"value": "id"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/users/signout",
+							"host": ["{{baseUrl}}"],
+							"path": ["users", "signout"]
+						},
+						"description": "Sign out without Authorization header (Indonesian).\n\n**Expected:** 400 Bad Request\n\nVerify `translated_message` is in Indonesian."
+					}
+				},
+				{
+					"name": "SignOut - Empty Auth Header",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": ""
+							},
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept-Language",
+								"value": "en"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/users/signout",
+							"host": ["{{baseUrl}}"],
+							"path": ["users", "signout"]
+						},
+						"description": "Sign out with empty Authorization header.\n\n**Expected:** 400 Bad Request or 401 Unauthorized"
+					}
+				},
+				{
+					"name": "SignOut - Invalid Token Format",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "invalid.token.here"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept-Language",
+								"value": "en"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/users/signout",
+							"host": ["{{baseUrl}}"],
+							"path": ["users", "signout"]
+						},
+						"description": "Sign out without Bearer prefix.\n\n**Expected:** 401 Unauthorized"
+					}
+				},
+				{
+					"name": "SignOut - Invalid JWT Token (English)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIn0.dozjgNryP4J3jVmNHl0w5N_XgL0n3I9PlFUP0THsR8U"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept-Language",
+								"value": "en"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/users/signout",
+							"host": ["{{baseUrl}}"],
+							"path": ["users", "signout"]
+						},
+						"description": "Sign out with invalid/forged JWT (English).\n\n**Expected:** 401 Unauthorized\n\nVerify `translated_message` is in English."
+					}
+				},
+				{
+					"name": "SignOut - Invalid JWT Token (Indonesian)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIn0.dozjgNryP4J3jVmNHl0w5N_XgL0n3I9PlFUP0THsR8U"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept-Language",
+								"value": "id"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/users/signout",
+							"host": ["{{baseUrl}}"],
+							"path": ["users", "signout"]
+						},
+						"description": "Sign out with invalid/forged JWT (Indonesian).\n\n**Expected:** 401 Unauthorized\n\nVerify `translated_message` is in Indonesian."
+					}
+				},
+				{
+					"name": "SignOut - Malformed JWT Token",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer not.a.valid.jwt"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept-Language",
+								"value": "en"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/users/signout",
+							"host": ["{{baseUrl}}"],
+							"path": ["users", "signout"]
+						},
+						"description": "Sign out with malformed JWT.\n\n**Expected:** 401 Unauthorized"
+					}
+				},
+				{
+					"name": "SignOut - Double SignOut (Revoked Token)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authToken}}"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept-Language",
+								"value": "en"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/users/signout",
+							"host": ["{{baseUrl}}"],
+							"path": ["users", "signout"]
+						},
+						"description": "Sign out with already revoked token.\n\n**Prerequisite:** Run 'SignOut - Success' first.\n\n**Expected:** 401 Unauthorized"
+					}
+				}
+			],
+			"description": "User logout endpoint tests with i18n.\n\nNote: Run 'SignIn - Success' first to get a valid token."
+		},
+		{
+			"name": "04 - Forgot Password",
+			"item": [
+				{
+					"name": "ForgotPassword - Success (English)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept-Language",
+								"value": "en"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"admin@industrix.id\",\n    \"locale\": \"en\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/users/password/forgot",
+							"host": ["{{baseUrl}}"],
+							"path": ["users", "password", "forgot"]
+						},
+						"description": "Request password reset email in English.\n\n**Expected:** 204 No Content\n\nCheck email for reset token (email should be in English)."
+					}
+				},
+				{
+					"name": "ForgotPassword - Success (Indonesian)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept-Language",
+								"value": "id"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"admin@industrix.id\",\n    \"locale\": \"id\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/users/password/forgot",
+							"host": ["{{baseUrl}}"],
+							"path": ["users", "password", "forgot"]
+						},
+						"description": "Request password reset email in Indonesian.\n\n**Expected:** 204 No Content\n\nCheck email for reset token (email should be in Indonesian)."
+					}
+				},
+				{
+					"name": "ForgotPassword - User Not Found (English)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept-Language",
+								"value": "en"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"notfound@example.com\",\n    \"locale\": \"en\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/users/password/forgot",
+							"host": ["{{baseUrl}}"],
+							"path": ["users", "password", "forgot"]
+						},
+						"description": "Request password reset for non-existent user (English).\n\n**Expected:** 404 Not Found\n\nVerify `translated_message` is in English."
+					}
+				},
+				{
+					"name": "ForgotPassword - User Not Found (Indonesian)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept-Language",
+								"value": "id"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"notfound@example.com\",\n    \"locale\": \"id\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/users/password/forgot",
+							"host": ["{{baseUrl}}"],
+							"path": ["users", "password", "forgot"]
+						},
+						"description": "Request password reset for non-existent user (Indonesian).\n\n**Expected:** 404 Not Found\n\nVerify `translated_message` is in Indonesian."
+					}
+				},
+				{
+					"name": "ForgotPassword - Missing Email",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept-Language",
+								"value": "en"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"locale\": \"en\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/users/password/forgot",
+							"host": ["{{baseUrl}}"],
+							"path": ["users", "password", "forgot"]
+						},
+						"description": "Request without email field.\n\n**Expected:** 400 Bad Request"
+					}
+				},
+				{
+					"name": "ForgotPassword - Missing Locale",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept-Language",
+								"value": "en"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"admin@industrix.id\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/users/password/forgot",
+							"host": ["{{baseUrl}}"],
+							"path": ["users", "password", "forgot"]
+						},
+						"description": "Request without locale field.\n\n**Expected:** 400 Bad Request"
+					}
+				},
+				{
+					"name": "ForgotPassword - Empty Body",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept-Language",
+								"value": "en"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/users/password/forgot",
+							"host": ["{{baseUrl}}"],
+							"path": ["users", "password", "forgot"]
+						},
+						"description": "Request with empty body.\n\n**Expected:** 400 Bad Request"
+					}
+				},
+				{
+					"name": "ForgotPassword - Invalid Email Format",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept-Language",
+								"value": "en"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"not-an-email\",\n    \"locale\": \"en\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/users/password/forgot",
+							"host": ["{{baseUrl}}"],
+							"path": ["users", "password", "forgot"]
+						},
+						"description": "Request with invalid email format.\n\n**Expected:** 400 Bad Request"
+					}
+				},
+				{
+					"name": "ForgotPassword - Empty Email",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept-Language",
+								"value": "en"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"\",\n    \"locale\": \"en\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/users/password/forgot",
+							"host": ["{{baseUrl}}"],
+							"path": ["users", "password", "forgot"]
+						},
+						"description": "Request with empty email.\n\n**Expected:** 400 Bad Request"
+					}
+				},
+				{
+					"name": "ForgotPassword - Malformed JSON",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept-Language",
+								"value": "en"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{invalid json"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/users/password/forgot",
+							"host": ["{{baseUrl}}"],
+							"path": ["users", "password", "forgot"]
+						},
+						"description": "Request with malformed JSON.\n\n**Expected:** 400 Bad Request"
+					}
+				}
+			],
+			"description": "Password reset request endpoint tests with i18n"
+		},
+		{
+			"name": "05 - Reset Password",
+			"item": [
+				{
+					"name": "ResetPassword - Success",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept-Language",
+								"value": "en"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"token\": \"{{resetToken}}\",\n    \"newPassword\": \"NewPassword123!\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/users/password",
+							"host": ["{{baseUrl}}"],
+							"path": ["users", "password"]
+						},
+						"description": "Reset password with valid token.\n\n**Prerequisite:** Get reset token from email after running 'ForgotPassword - Success'.\n\n**Expected:** 204 No Content"
+					}
+				},
+				{
+					"name": "ResetPassword - Invalid Token (English)",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept-Language",
+								"value": "en"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"token\": \"invalid-reset-token\",\n    \"newPassword\": \"NewPassword123!\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/users/password",
+							"host": ["{{baseUrl}}"],
+							"path": ["users", "password"]
+						},
+						"description": "Reset password with invalid token (English).\n\n**Expected:** 400 Bad Request or 404 Not Found\n\nVerify `translated_message` is in English."
+					}
+				},
+				{
+					"name": "ResetPassword - Invalid Token (Indonesian)",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept-Language",
+								"value": "id"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"token\": \"invalid-reset-token\",\n    \"newPassword\": \"NewPassword123!\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/users/password",
+							"host": ["{{baseUrl}}"],
+							"path": ["users", "password"]
+						},
+						"description": "Reset password with invalid token (Indonesian).\n\n**Expected:** 400 Bad Request or 404 Not Found\n\nVerify `translated_message` is in Indonesian."
+					}
+				},
+				{
+					"name": "ResetPassword - Missing Token",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept-Language",
+								"value": "en"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"newPassword\": \"NewPassword123!\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/users/password",
+							"host": ["{{baseUrl}}"],
+							"path": ["users", "password"]
+						},
+						"description": "Reset password without token field.\n\n**Expected:** 400 Bad Request"
+					}
+				},
+				{
+					"name": "ResetPassword - Missing Password",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept-Language",
+								"value": "en"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"token\": \"{{resetToken}}\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/users/password",
+							"host": ["{{baseUrl}}"],
+							"path": ["users", "password"]
+						},
+						"description": "Reset password without newPassword field.\n\n**Expected:** 400 Bad Request"
+					}
+				},
+				{
+					"name": "ResetPassword - Empty Body",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept-Language",
+								"value": "en"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/users/password",
+							"host": ["{{baseUrl}}"],
+							"path": ["users", "password"]
+						},
+						"description": "Reset password with empty body.\n\n**Expected:** 400 Bad Request"
+					}
+				},
+				{
+					"name": "ResetPassword - Password Too Short (English)",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept-Language",
+								"value": "en"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"token\": \"{{resetToken}}\",\n    \"newPassword\": \"short\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/users/password",
+							"host": ["{{baseUrl}}"],
+							"path": ["users", "password"]
+						},
+						"description": "Reset with password too short (English).\n\n**Expected:** 400 Bad Request (PasswordTooShort)\n\nVerify `translated_message` is in English."
+					}
+				},
+				{
+					"name": "ResetPassword - Password Too Short (Indonesian)",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept-Language",
+								"value": "id"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"token\": \"{{resetToken}}\",\n    \"newPassword\": \"short\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/users/password",
+							"host": ["{{baseUrl}}"],
+							"path": ["users", "password"]
+						},
+						"description": "Reset with password too short (Indonesian).\n\n**Expected:** 400 Bad Request (PasswordTooShort)\n\nVerify `translated_message` is in Indonesian."
+					}
+				},
+				{
+					"name": "ResetPassword - No Uppercase",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept-Language",
+								"value": "en"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"token\": \"{{resetToken}}\",\n    \"newPassword\": \"password123!\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/users/password",
+							"host": ["{{baseUrl}}"],
+							"path": ["users", "password"]
+						},
+						"description": "Reset with password missing uppercase.\n\n**Expected:** 400 Bad Request (PasswordNoUpperCase)"
+					}
+				},
+				{
+					"name": "ResetPassword - No Lowercase",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept-Language",
+								"value": "en"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"token\": \"{{resetToken}}\",\n    \"newPassword\": \"PASSWORD123!\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/users/password",
+							"host": ["{{baseUrl}}"],
+							"path": ["users", "password"]
+						},
+						"description": "Reset with password missing lowercase.\n\n**Expected:** 400 Bad Request (PasswordNoLowerCase)"
+					}
+				},
+				{
+					"name": "ResetPassword - No Number",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept-Language",
+								"value": "en"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"token\": \"{{resetToken}}\",\n    \"newPassword\": \"Password!\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/users/password",
+							"host": ["{{baseUrl}}"],
+							"path": ["users", "password"]
+						},
+						"description": "Reset with password missing number.\n\n**Expected:** 400 Bad Request (PasswordNoNumber)"
+					}
+				},
+				{
+					"name": "ResetPassword - No Special Char",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept-Language",
+								"value": "en"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"token\": \"{{resetToken}}\",\n    \"newPassword\": \"Password123\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/users/password",
+							"host": ["{{baseUrl}}"],
+							"path": ["users", "password"]
+						},
+						"description": "Reset with password missing special character.\n\n**Expected:** 400 Bad Request (PasswordNoSpecialChar)"
+					}
+				},
+				{
+					"name": "ResetPassword - Empty Token",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept-Language",
+								"value": "en"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"token\": \"\",\n    \"newPassword\": \"NewPassword123!\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/users/password",
+							"host": ["{{baseUrl}}"],
+							"path": ["users", "password"]
+						},
+						"description": "Reset with empty token.\n\n**Expected:** 400 Bad Request"
+					}
+				},
+				{
+					"name": "ResetPassword - Empty Password",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept-Language",
+								"value": "en"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"token\": \"{{resetToken}}\",\n    \"newPassword\": \"\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/users/password",
+							"host": ["{{baseUrl}}"],
+							"path": ["users", "password"]
+						},
+						"description": "Reset with empty password.\n\n**Expected:** 400 Bad Request"
+					}
+				},
+				{
+					"name": "ResetPassword - Malformed JSON",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept-Language",
+								"value": "en"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{invalid json"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/users/password",
+							"host": ["{{baseUrl}}"],
+							"path": ["users", "password"]
+						},
+						"description": "Reset with malformed JSON.\n\n**Expected:** 400 Bad Request"
+					}
+				},
+				{
+					"name": "ResetPassword - Already Used Token",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept-Language",
+								"value": "en"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"token\": \"{{resetToken}}\",\n    \"newPassword\": \"AnotherPassword123!\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/users/password",
+							"host": ["{{baseUrl}}"],
+							"path": ["users", "password"]
+						},
+						"description": "Reset with already used token.\n\n**Prerequisite:** Run 'ResetPassword - Success' first.\n\n**Expected:** 400 Bad Request or 404 Not Found"
+					}
+				}
+			],
+			"description": "Password reset endpoint tests with i18n.\n\nNote: Get reset token from email after running 'ForgotPassword - Success'."
+		}
+	]
+}
