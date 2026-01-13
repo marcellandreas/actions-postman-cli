@@ -8,7 +8,7 @@
 	"variable": [
 		{
 			"key": "baseUrl",
-			"value": "http://103.150.190.166:8000",
+			"value": "http://103.150.190.166:8000/authentication",
 			"type": "string"
 		},
 		{
